@@ -6,13 +6,14 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 
 class ContactMe extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $topic;
-    public $total;
+    public $total_actors;
 
     /**
      * Create a new message instance.
@@ -21,6 +22,11 @@ class ContactMe extends Mailable
      */
     public function __construct(string $topic)
     {
+        // query db for all actors
+
+        // dd(DB::table('actor')->count());
+        $this->total_actors = DB::table('actor')->count();
+        // $this->total_actors = 32;
         $this->topic = $topic;
     }
 

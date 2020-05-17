@@ -10,5 +10,7 @@
   <h1>It works again!</h1>
 
   <p>It sounds like you want to hear more about {{ $topic }}.</p>
+
+  <p>There are {{ $total_actors }} actors in the actor table of the MySQL sakila database.</p>
 </body>
 </html>
