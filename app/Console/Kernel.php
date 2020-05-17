@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\WordOfTheDay::class,
     ];
 
     /**
@@ -24,7 +24,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        // $schedule->command('word:day')->daily();
         // $schedule->command('inspire')->hourly();
+
+        // $schedule->command('word:day')->everyFiveMinutes();
+        // scheduling reference
+        // https://laravel.com/docs/7.x/scheduling#scheduling-artisan-commands
+        $schedule->command('word:day')->dailyAt('13:00');
     }
 
     /**
