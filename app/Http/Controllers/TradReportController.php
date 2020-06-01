@@ -18,7 +18,7 @@ class TradReportController extends Controller
 
         // Get dataset #1 - trad, full-time enrolled (a or w student-status);
         $results1 = TradFulltimeEnrolled::get($term);
-        dd($results1);
+        // dd($results1);
         // tinker($results);
 
         // TODO - Add entry_type_alt field to ds1
@@ -56,7 +56,7 @@ class TradReportController extends Controller
 
         // Get dataset #2 - at-athlete data
         $results2 = AtAthletes::get($term);
-        // dd($results2);
+        // dd($results1, $results2);
 
         // Get dataset #3 - sr-athlete data
         $results3 = SrAthletes::get($term);
@@ -64,10 +64,72 @@ class TradReportController extends Controller
 
         //TODO add code to combine the three baseline datasets!!
         $temp = $results1->zip($results2, $results3);
-        $results = $temp->toArray();
-        dd($results);
+        // $results = $temp->toArray();
+        // dd($results);
+        // dd($temp);
         // dd($results->all());
         // dd($results->all()->toArray());
+
+        $first = $temp->first();
+        $combined = $first->merge(function($item) {
+            return array_merge(item[0], item[1], item[2]);
+        });
+        
+        // $combined = array_merge($first->items[0], $first->items[1], $first->items[2]);
+        // dd($first);
+        dd($first, $combined);
+
+        // $newItems = $temp->map(function($item) {
+        //   // return $result->merge($result[0], $result[1], $result[2]);
+        //   return array_merge($item[0], $item->'1');
+        // });
+        // // dd($newItems->toArray());
+        // dd($newItems);
+
+        /////////////////////////////////////////////////////////////
+        // works!!!!
+        /////////////////////////////////////////////////////////////
+        // $merged = collect([]);
+        //
+        // foreach($results1 as $item1)
+        // {
+        //   foreach($results2 as $item2)
+        //   {
+        //       if ($item1->DFLT_ID == $item2->DFLT_ID)
+        //       {
+        //   		    $merged->push(['id' => $item1->DFLT_ID,
+        //                        'last' => $item1->LAST_NAME,
+        //                        'first' => $item1->FIRST_NAME,
+        //                        'NumAtSports' => 	$item2->ISATATHLETE,
+        //                       ]);
+        //       }
+        //   }
+        // }
+        //
+        // dd($temp, $merged);
+
+        // $merged = collect([]);
+        //
+        // foreach($results1 as $item1)
+        // {
+        //   foreach($results2 as $item2)
+        //   {
+        //     foreach($results3 as $item3)
+        //     {
+        //       if (($item1->DFLT_ID == $item2->DFLT_ID) == $item3->DFLT_ID)
+        //       {
+        //           $merged->push(['id' => $item1->DFLT_ID,
+        //                        'last' => $item1->LAST_NAME,
+        //                        'first' => $item1->FIRST_NAME,
+        //                        'NumAtSports' => 	$item2->ISATATHLETE,
+        //                        'NumSrSports' => 	$item3->ISSRATHLETE,
+        //                       ]);
+        //       }
+        //     }
+        //   }
+        // }
+        //
+        // dd($merged);
 
         ////////////////////////////////////////////////////////////////////
         //FIX code here!!!!!!!
