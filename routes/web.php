@@ -17,6 +17,7 @@ Route::get('/recipients', 'RecipientsController@index');
 
 #copied from odbc_test
 Route::get('/ds1', 'TradReportController@index');
+
 Route::get('/sr_athletes', function() {
 
   $results = SrAthletes::get('20191');

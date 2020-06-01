@@ -26,8 +26,9 @@ class AtAthletes
             ->leftJoin($at_athlete, function ($join) use ($sr_term, $at_athlete) {
         		      $join->on($sr_term.'.NAME_ID', '=', $at_athlete.'.NAME_ID');
             })
-            ->selectRaw($name.'.DFLT_ID, count('. $at_athlete . '.ACTI_ID) as IsSrAthlete')
-            ->groupBy($name.'.DFLT_ID');
+            ->selectRaw($name.'.DFLT_ID, count('. $at_athlete . '.ACTI_ID) as IsAtAthlete')
+            ->groupBy($name.'.DFLT_ID')
+            ->orderBy($name . '.DFLT_ID', 'asc');
             // ->orderBy($name.'.LAST_NAME', 'asc')
             // ->orderBy($name.'.FIRST_NAME', 'asc');
 

@@ -29,7 +29,8 @@ class SrAthletes
                   $join->on($sr_term.'.TERM_ID', '=', $sr_athlete.'.TERM_ID');
             })
             ->selectRaw($name.'.DFLT_ID, count('. $sr_athlete . '.ACTI_ID) as IsSrAthlete')
-            ->groupBy($name.'.DFLT_ID');
+            ->groupBy($name.'.DFLT_ID')
+            ->orderBy($name . '.DFLT_ID', 'asc');
             // ->orderBy($name.'.LAST_NAME', 'asc')
             // ->orderBy($name.'.FIRST_NAME', 'asc');
 

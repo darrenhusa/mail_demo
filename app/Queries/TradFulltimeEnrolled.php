@@ -29,8 +29,9 @@ class TradFulltimeEnrolled
                  $sr_term . '.STUD_STATUS',
                  $sr_term . '.ETYP_ID',
                  $sr_term . '.PRGM_ID1')
-          ->orderBy($name . '.LAST_NAME', 'asc')
-          ->orderBy($name . '.FIRST_NAME', 'asc');
+          ->orderBy($name . '.DFLT_ID', 'asc');
+          // ->orderBy($name . '.LAST_NAME', 'asc')
+          // ->orderBy($name . '.FIRST_NAME', 'asc');
 
       $results1 = $query1->get();
 
