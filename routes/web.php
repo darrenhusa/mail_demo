@@ -4,7 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 // use App\Mail\FtTradHeadcountByTypes;
 use App\Jobs\TradFtHeadcountByTypes;
-// use App\Recipient;
+use App\Queries\SrAthletes;
+use App\Queries\AtAthletes;
 
 Route::get('/', function () {
     return view('welcome');
@@ -16,6 +17,18 @@ Route::get('/recipients', 'RecipientsController@index');
 
 #copied from odbc_test
 Route::get('/ds1', 'TradReportController@index');
+Route::get('/sr_athletes', function() {
+
+  $results = SrAthletes::get('20191');
+  dd($results);
+});
+
+Route::get('/at_athletes', function() {
+
+  $results = AtAthletes::get('20191');
+  dd($results);
+});
+
 
 Route::get('/trad_ft', 'TradReportController@get_trad_ft');
 // Route::get('/recipients', function() {
