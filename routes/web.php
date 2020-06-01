@@ -13,6 +13,11 @@ Route::get('/', function () {
 Route::get('/send', 'ReportController@send');
 
 Route::get('/recipients', 'RecipientsController@index');
+
+#copied from odbc_test
+Route::get('/ds1', 'TradReportController@index');
+
+Route::get('/trad_ft', 'TradReportController@get_trad_ft');
 // Route::get('/recipients', function() {
 //   $recipients = Recipient::get();
 //   dd($recipients);
