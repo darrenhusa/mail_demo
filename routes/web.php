@@ -4,12 +4,19 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 // use App\Mail\FtTradHeadcountByTypes;
 use App\Jobs\TradFtHeadcountByTypes;
+// use App\Recipient;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::get('/send', 'ReportController@send');
+
+Route::get('/recipients', 'RecipientsController@index');
+// Route::get('/recipients', function() {
+//   $recipients = Recipient::get();
+//   dd($recipients);
+// });
 
 // Route::get('/send', function () {
 

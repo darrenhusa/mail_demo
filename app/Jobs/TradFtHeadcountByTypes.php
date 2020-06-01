@@ -39,6 +39,8 @@ class TradFtHeadcountByTypes implements ShouldQueue
     public function handle()
     {
 
+      // dd($this->to, $this->data, $this->term);
+
       Mail::to($this->to)
           ->send(new FtTradHeadcountByTypes($this->term, $this->data));
 

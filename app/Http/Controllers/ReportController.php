@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Jobs\TradFtHeadcountByTypes;
+use App\Recipient;
 
 class ReportController extends Controller
 {
@@ -13,12 +14,22 @@ class ReportController extends Controller
       $term = '20201';
 
       // email report recipients
-      $to = array(
-        ['name' => 'Johnny Craig', 'email' => 'jcraig@ccsj.edu'],
-        ['name' => 'Lynn Miskus', 'email' => 'lmiskus@ccsj.edu'],
-        ['name' => 'Andy Marks', 'email' => 'amarks@ccsj.edu'],
-        ['name' => 'Dionne Jones-Malone', 'email' => 'djonesmalone@ccsj.edu'],
-      );
+      $recipients = Recipient::all();
+      // dd($to);
+
+      $to = [];
+
+      foreach($recipients as $recipient)
+      {
+        array_push($to, ['name' => $recipient->first_name . ' ' . $recipient->last_name,
+                     'email' => $recipient->email]);
+      }
+
+      // dd($to);
+
+      // $to = array(
+      //   ['name' => first1 last1, 'email' => email1],
+      // );
 
       // put Empower query builder queries here??
       // Need to calculate each of the headcount elements!!!
