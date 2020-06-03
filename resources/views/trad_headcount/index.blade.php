@@ -7,7 +7,7 @@
   <title>TRAD Headcount Report</title>
 </head>
 <body>
-  <h1>Fall 2020 Enrolled Students</h1>
+  <h1>Fall 2020 Full-time TRAD Enrolled Students</h1>
   <table border='1'>
     <theader>
       <tr>
@@ -18,6 +18,11 @@
         <td>Is AT or SR Athlete</td>
       </tr>
     </theader>
+    <tfooter>
+      <tr>
+        {{ $students->links() }}
+      </tr>
+    </tfooter>
     <tbody>
       @foreach($students as $student)
       <tr>

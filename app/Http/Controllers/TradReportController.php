@@ -133,8 +133,9 @@ class TradReportController extends Controller
           $student->FullName = $student->LAST_NAME . ', ' . $student->FIRST_NAME;
         }
 
-        $students = $students->sortBy('FullName');
-            // ->paginate(10);
+        $students = $students
+            ->sortBy('FullName')
+            ->paginate(10);
 
         // dd($students);
 
