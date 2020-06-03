@@ -94,15 +94,18 @@ class TradReportController extends Controller
           {
             array_push($new_array, (array)$row);
           }
-          $result = array_merge($new_array[0], $new_array[1], $new_array[2]);
+          // $result = array_merge($new_array[0], $new_array[1], $new_array[2]);
+          // how to convert an array to an object!!!!
+          //https://thewebtier.com/php/convert-array-object-php/
+          $result = json_encode(array_merge($new_array[0], $new_array[1], $new_array[2]));
 
           $new_collection->push($result);
         }
 
         $students = $new_collection;
         // dd($new_collection);
-        // return $students;
-        return $new_collection;
+        return $students;
+        // return $new_collection;
 
         /////////////////////////////////////////////////////////////////////////////////
         //TODO - Need to add an EntryType ALt field and a IsAnAthlete field to the data!!!
