@@ -70,88 +70,51 @@ class TradReportController extends Controller
         // dd($results->all());
         // dd($results->all()->toArray());
 
-        $first = $temp->first();
-        $combined = $first->merge(function($item) {
-            return array_merge(item[0], item[1], item[2]);
-        });
-        
-        // $combined = array_merge($first->items[0], $first->items[1], $first->items[2]);
+        // This works for a single item ==> Now need to iterate over ALL items!!!
+        /////////////////////////////////////////////////////////////////////////
+        // $first = $temp->first();
         // dd($first);
-        dd($first, $combined);
 
-        // $newItems = $temp->map(function($item) {
-        //   // return $result->merge($result[0], $result[1], $result[2]);
-        //   return array_merge($item[0], $item->'1');
-        // });
-        // // dd($newItems->toArray());
-        // dd($newItems);
-
-        /////////////////////////////////////////////////////////////
-        // works!!!!
-        /////////////////////////////////////////////////////////////
-        // $merged = collect([]);
+        // $new_array = [];
         //
-        // foreach($results1 as $item1)
+        // foreach($first as $row)
         // {
-        //   foreach($results2 as $item2)
-        //   {
-        //       if ($item1->DFLT_ID == $item2->DFLT_ID)
-        //       {
-        //   		    $merged->push(['id' => $item1->DFLT_ID,
-        //                        'last' => $item1->LAST_NAME,
-        //                        'first' => $item1->FIRST_NAME,
-        //                        'NumAtSports' => 	$item2->ISATATHLETE,
-        //                       ]);
-        //       }
-        //   }
+        //   array_push($new_array, (array)$row);
         // }
-        //
-        // dd($temp, $merged);
+        // // var_dump($first, $new_array);
+        // $result = array_merge($new_array[0], $new_array[1], $new_array[2]);
+        // dd($first, $result);
 
-        // $merged = collect([]);
-        //
-        // foreach($results1 as $item1)
-        // {
-        //   foreach($results2 as $item2)
-        //   {
-        //     foreach($results3 as $item3)
-        //     {
-        //       if (($item1->DFLT_ID == $item2->DFLT_ID) == $item3->DFLT_ID)
-        //       {
-        //           $merged->push(['id' => $item1->DFLT_ID,
-        //                        'last' => $item1->LAST_NAME,
-        //                        'first' => $item1->FIRST_NAME,
-        //                        'NumAtSports' => 	$item2->ISATATHLETE,
-        //                        'NumSrSports' => 	$item3->ISSRATHLETE,
-        //                       ]);
-        //       }
-        //     }
-        //   }
-        // }
-        //
-        // dd($merged);
+        $new_collection = collect([]);
 
-        ////////////////////////////////////////////////////////////////////
-        //FIX code here!!!!!!!
-        ////////////////////////////////////////////////////////////////////
-        // $newItems = collect($results)->map(function($result) {
-        //   // return $result->merge($result[0], $result[1], $result[2]);
-        //   return array_merge($result[0], $result[1], $result[2]);
-        // });
-        // // dd($newItems->toArray());
-        // dd($newItems);
+        foreach($temp as $record)
+        {
+          $new_array = [];
+          foreach($record as $row)
+          {
+            array_push($new_array, (array)$row);
+          }
+          $result = array_merge($new_array[0], $new_array[1], $new_array[2]);
 
-        // $newItems = collect($newCollection->all());
+          $new_collection->push($result);
+        }
 
-        // $Athletes = $newItems->filter(function($item) { 	return $item['NumAtSports'] > 0 || $item['NumSrSports'] > 0;
-        // });
-        //
-        // $NonAthletes = $newItems->filter(function($item) { 	return $item['NumAtSports'] == 0 && $item['NumSrSports'] == 0;
-        // });
+        $students = $new_collection;
+        // dd($new_collection);
+        // return $students;
+        return $new_collection;
 
+        /////////////////////////////////////////////////////////////////////////////////
+        //TODO - Need to add an EntryType ALt field and a IsAnAthlete field to the data!!!
+        /////////////////////////////////////////////////////////////////////////////////
+        // return $new_collection->toJson();
 
-        // tinker($results);
-        // dd($results);
+        ////////////////////////////////////////////////////////////////////////
+        //FIX when try and return a collection to the view I get an error
+        // Facade\Ignition\Exceptions\ViewException
+        // Trying to get property 'DFLT_ID' of non-object (View: C:\Users\darrenh\laravel_code\empower\mail_demo\resources\views\trad_headcount\index.blade.php)
+        ////////////////////////////////////////////////////////////////////////
+        // return view('trad_headcount.index', compact('students'));
     }
 
 
