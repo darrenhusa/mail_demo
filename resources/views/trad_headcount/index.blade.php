@@ -14,6 +14,9 @@
         <td>Student ID</td>
         <td>Last</td>
         <td>First</td>
+        <td>Etyp_id</td>
+        <td>Num AtAthlete Sports</td>
+        <td>Num SrAthlete Sports</td>
       </tr>
     </theader>
     <tbody>
@@ -22,6 +25,9 @@
         <td>{{ $student->DFLT_ID }}</td>
         <td>{{ $student->LAST_NAME }}</td>
         <td>{{ $student->FIRST_NAME }}</td>
+        <td>{{ $student->ETYP_ID }}</td>
+        <td>{{ $student->ISATATHLETE }}</td>
+        <td>{{ $student->ISSRATHLETE }}</td>
       </tr>
       @endforeach
     </tbody>

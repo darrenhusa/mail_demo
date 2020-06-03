@@ -102,7 +102,26 @@ class TradReportController extends Controller
           $new_collection->push($result);
         }
 
-        $students = $new_collection;
+        //TODO - Need to sort the collection by last and then firstname!!!
+
+        ///////////////////////////////
+        //SORT NOT WORKING??????!!!!!
+        ///////////////////////////////
+        $stu_x = $new_collection;
+        // $students = $stu_x->sortBy('LAST_NAME');
+        // $students = $stu_x->sortBy('LAST_NAME', 'FIRST_NAME');
+        // $students = $stu_x->sortBy(['LAST_NAME', 'FIRST_NAME']);
+        // $students = $stu_x->sortBy('LAST_NAME')->sortBy('FIRST_NAME');
+        $students = $stu_x->sortBy('FIRST_NAME')->sortBy('LAST_NAME');
+        // $students = $stu_x->sortBy('LAST_NAME', 'FIRST_NAME');
+        // $students = $stu_x->sortBy('LAST_NAME');
+
+        // $students = $stu_x->orderBy('LAST_NAME', 'ASC')->orderBy('FIRST_NAME', 'ASC');
+        // $students = $stu_x->orderBy('FIRST_NAME')->orderBy('LAST_NAME');
+
+        // $students = $stu_x->sortBy('LAST_NAME')->sortBy('LAST_NAME');
+
+        // dd($students);
         // dd($new_collection);
         // return $students;
         // return $new_collection;
