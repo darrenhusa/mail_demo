@@ -107,19 +107,18 @@ class TradReportController extends Controller
         ///////////////////////////////
         //SORT NOT WORKING??????!!!!!
         ///////////////////////////////
-        $stu_x = $new_collection;
+        $students = $new_collection;
+        // $stu_x = $new_collection;
         // $students = $stu_x->sortBy('LAST_NAME');
         // $students = $stu_x->sortBy('LAST_NAME', 'FIRST_NAME');
         // $students = $stu_x->sortBy(['LAST_NAME', 'FIRST_NAME']);
         // $students = $stu_x->sortBy('LAST_NAME')->sortBy('FIRST_NAME');
-        $students = $stu_x->sortBy('FIRST_NAME')->sortBy('LAST_NAME');
+        // $students = $stu_x->sortBy('FIRST_NAME')->sortBy('LAST_NAME');
         // $students = $stu_x->sortBy('LAST_NAME', 'FIRST_NAME');
         // $students = $stu_x->sortBy('LAST_NAME');
 
         // $students = $stu_x->orderBy('LAST_NAME', 'ASC')->orderBy('FIRST_NAME', 'ASC');
         // $students = $stu_x->orderBy('FIRST_NAME')->orderBy('LAST_NAME');
-
-        // $students = $stu_x->sortBy('LAST_NAME')->sortBy('LAST_NAME');
 
         // dd($students);
         // dd($new_collection);
@@ -128,38 +127,16 @@ class TradReportController extends Controller
 
         foreach($students as $student)
         {
-            if($student->ETYP_ID == 'AH' || $student->ETYP_ID == 'HS' || $student->ETYP_ID == 'GE')
-            {
-              $student->EntryTypeAlt = 'first-time';
-            }
-            elseif($student->ETYP_ID == 'TR' || $student->ETYP_ID == 'T2' || $student->ETYP_ID == 'T4')
-            {
-              $student->EntryTypeAlt = 'transfer';
-            }
-            elseif($student->ETYP_ID == 'CS' || $student->ETYP_ID == 'RS' || $student->ETYP_ID == 'U2')
-            {
-              $student->EntryTypeAlt = 'continuing/returning';
-            }
-            else
-            {
-              $student->EntryTypeAlt = 'other';
-            }
+          // $student->EntryTypeAlt = 'to-do';
+          $student->EntryTypeAlt = $this->build_entry_type_alt_field($student->ETYP_ID);
+          $student->IsAthlete = $this->build_is_athlete_field($student->ISATATHLETE, $student->ISSRATHLETE);
+          $student->FullName = $student->LAST_NAME . ', ' . $student->FIRST_NAME;
         }
 
-        foreach($students as $student)
-        {
-          if($student->ISATATHLETE > 0 || $student->ISSRATHLETE > 0)
-          {
-            // $student->IsAthlete = True;
-            // $student->IsAthlete = (bool)1;
-            $student->IsAthlete = 1;
-          }
-          else
-          {
-            // $student->IsAthlete = (bool)0;
-            $student->IsAthlete = 0;
-          }
-        }
+        $students = $students->sortBy('FullName');
+            // ->paginate(10);
+
+        // dd($students);
 
         //TODO work on code to produce the various counts needed for the email reprot!!!
 
@@ -171,6 +148,41 @@ class TradReportController extends Controller
         // Trying to get property 'DFLT_ID' of non-object (View: C:\Users\darrenh\laravel_code\empower\mail_demo\resources\views\trad_headcount\index.blade.php)
         ////////////////////////////////////////////////////////////////////////
         return view('trad_headcount.index', compact('students'));
+    }
+
+    private function build_is_athlete_field($value1, $value2)
+    {
+      if($value1 > 0 || $value2 > 0)
+      {
+        $result = 1;
+      }
+      else
+      {
+        $result = 0;
+      }
+      return $result;
+    }
+
+    private function build_entry_type_alt_field($value)
+    {
+      if($value == 'AH' || $value == 'HS' || $value == 'GE')
+      {
+        $result = 'first-time';
+      }
+      elseif($value == 'TR' || $value == 'T2' || $value == 'T4')
+      {
+        $result = 'transfer';
+      }
+      elseif($value == 'CS' || $value == 'RS' || $value == 'U2')
+      {
+        $result = 'continuing/returning';
+      }
+      else
+      {
+        $result = 'other';
+      }
+
+      return $result;
     }
 
 
@@ -202,6 +214,5 @@ class TradReportController extends Controller
 
           dd($all_by_entry_type);
           // dd($all_count, $fulltime_count, $parttime_count);
-
     }
 }
