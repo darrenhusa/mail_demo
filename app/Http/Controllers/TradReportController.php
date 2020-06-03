@@ -126,10 +126,44 @@ class TradReportController extends Controller
         // return $students;
         // return $new_collection;
 
-        /////////////////////////////////////////////////////////////////////////////////
-        //TODO - Need to add an EntryType ALt field and a IsAnAthlete field to the data!!!
-        /////////////////////////////////////////////////////////////////////////////////
-        // return $new_collection->toJson();
+        foreach($students as $student)
+        {
+            if($student->ETYP_ID == 'AH' || $student->ETYP_ID == 'HS' || $student->ETYP_ID == 'GE')
+            {
+              $student->EntryTypeAlt = 'first-time';
+            }
+            elseif($student->ETYP_ID == 'TR' || $student->ETYP_ID == 'T2' || $student->ETYP_ID == 'T4')
+            {
+              $student->EntryTypeAlt = 'transfer';
+            }
+            elseif($student->ETYP_ID == 'CS' || $student->ETYP_ID == 'RS' || $student->ETYP_ID == 'U2')
+            {
+              $student->EntryTypeAlt = 'continuing/returning';
+            }
+            else
+            {
+              $student->EntryTypeAlt = 'other';
+            }
+        }
+
+        foreach($students as $student)
+        {
+          if($student->ISATATHLETE > 0 || $student->ISSRATHLETE > 0)
+          {
+            // $student->IsAthlete = True;
+            // $student->IsAthlete = (bool)1;
+            $student->IsAthlete = 1;
+          }
+          else
+          {
+            // $student->IsAthlete = (bool)0;
+            $student->IsAthlete = 0;
+          }
+        }
+
+        //TODO work on code to produce the various counts needed for the email reprot!!!
+
+        // dd($students);
 
         ////////////////////////////////////////////////////////////////////////
         //FIX when try and return a collection to the view I get an error
