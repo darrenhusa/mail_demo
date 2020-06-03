@@ -97,14 +97,14 @@ class TradReportController extends Controller
           // $result = array_merge($new_array[0], $new_array[1], $new_array[2]);
           // how to convert an array to an object!!!!
           //https://thewebtier.com/php/convert-array-object-php/
-          $result = json_encode(array_merge($new_array[0], $new_array[1], $new_array[2]));
+          $result = json_decode(json_encode(array_merge($new_array[0], $new_array[1], $new_array[2])));
 
           $new_collection->push($result);
         }
 
         $students = $new_collection;
         // dd($new_collection);
-        return $students;
+        // return $students;
         // return $new_collection;
 
         /////////////////////////////////////////////////////////////////////////////////
@@ -117,7 +117,7 @@ class TradReportController extends Controller
         // Facade\Ignition\Exceptions\ViewException
         // Trying to get property 'DFLT_ID' of non-object (View: C:\Users\darrenh\laravel_code\empower\mail_demo\resources\views\trad_headcount\index.blade.php)
         ////////////////////////////////////////////////////////////////////////
-        // return view('trad_headcount.index', compact('students'));
+        return view('trad_headcount.index', compact('students'));
     }
 
 
