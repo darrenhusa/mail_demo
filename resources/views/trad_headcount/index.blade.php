@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>TRAD Headcount Report</title>
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
 <body>
   <h1>Fall 2020 Full-time TRAD Enrolled Students</h1>
@@ -18,11 +20,6 @@
         <td>Is AT or SR Athlete</td>
       </tr>
     </theader>
-    <tfooter>
-      <tr>
-        {{ $students->links() }}
-      </tr>
-    </tfooter>
     <tbody>
       @foreach($students as $student)
       <tr>
@@ -35,5 +32,6 @@
       @endforeach
     </tbody>
   </table>
+  {{ $students->links() }}
 </body>
 </html>
