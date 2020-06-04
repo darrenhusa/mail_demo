@@ -13,8 +13,29 @@ class TradReportController extends Controller
 {
     public function index()
     {
-        $term = '20191';
+        // $term = '20191';
+        $term = '20201';
         $students = FtTradHeadcountsByTypes::get($term);
+
+        // FOR DEBUG - trying to track down the coding anomaly
+        // with the continuing athlete vs non-athlete counts.
+        // check my AT query since getting flase positives (i.e. 4 athleets when they are non????)
+        // $studentsSorted = $students->sortBy('FullName');
+
+        // $continuingStudents = $studentsSorted->filter(function($student) {
+        //   return $student->EntryTypeAlt == 'continuing/returning';
+        // });
+        //
+        // $csAthletes = $continuingStudents->filter(function($student) {
+        //   return $student->IsAthlete == 1;
+        // });
+        //
+        // $fullNames = $csAthletes->pluck('FullName')->toArray();
+        // // dd($continuingStudents->count());
+        // // dd($continuingStudents);
+        // dd($fullNames);
+        // // dd($csAthletes);
+        // dd($csAthletes->count());
 
         // // Get dataset #1 - trad, full-time enrolled (a or w student-status);
         // $results1 = TradFulltimeEnrolled::get($term);
