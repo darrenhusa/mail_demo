@@ -21,39 +21,6 @@ class TradReportController extends Controller
         // dd($results1);
         // tinker($results);
 
-        // TODO - Add entry_type_alt field to ds1
-        // first-time = AH, HS, GE
-        // continuing = CS, RS
-        // transfer = TR, T2, T4
-
-        //FIX - need to fix code below --- receiving the error
-        //ERROR: Cannot use object of type stdClass as array
-
-        // $withEntryTypeAlt = $results1->map(function($result) {
-        //     if($result['ETYP_ID'] == 'AH' || $result['ETYP_ID'] == 'HS' || $result['ETYP_ID'] == 'GE')
-        //     {
-        //       $result['EntryTypeAlt'] = 'first-time';
-        //     }
-        //     elseif($result['ETYP_ID'] == 'TR' || $result['ETYP_ID'] == 'T2' || $result['ETYP_ID'] == 'T4')
-        //     {
-        //       $result['EntryTypeAlt'] = 'transfer';
-        //     }
-        //     elseif($result['ETYP_ID'] == 'CS' || $result['ETYP_ID'] == 'RS' || $result['ETYP_ID'] == 'U2')
-        //     {
-        //       $result['EntryTypeAlt'] = 'continuing/returning';
-        //     }
-        //     else
-        //     {
-        //       $result['EntryTypeAlt'] = 'OTHER';
-        //     }
-        //     return $result['EntryTypeAlt'];
-        // });
-        // // dd($newItems->toArray());
-        // dd($withEntryTypeAlt);
-
-        // $all_count = $results1->count();
-        // dd($all_count);
-
         // Get dataset #2 - at-athlete data
         $results2 = AtAthletes::get($term);
         // dd($results1, $results2);
@@ -62,10 +29,9 @@ class TradReportController extends Controller
         $results3 = SrAthletes::get($term);
         // dd($results3);
 
-        //TODO add code to combine the three baseline datasets!!
+        // combine the three baseline datasets!!
         $temp = $results1->zip($results2, $results3);
         // $results = $temp->toArray();
-        // dd($results);
         // dd($temp);
         // dd($results->all());
         // dd($results->all()->toArray());
@@ -102,32 +68,11 @@ class TradReportController extends Controller
           $new_collection->push($result);
         }
 
-        //TODO - Need to sort the collection by last and then firstname!!!
-
-        ///////////////////////////////
-        //SORT NOT WORKING??????!!!!!
-        ///////////////////////////////
         $students = $new_collection;
-        // $stu_x = $new_collection;
-        // $students = $stu_x->sortBy('LAST_NAME');
-        // $students = $stu_x->sortBy('LAST_NAME', 'FIRST_NAME');
-        // $students = $stu_x->sortBy(['LAST_NAME', 'FIRST_NAME']);
-        // $students = $stu_x->sortBy('LAST_NAME')->sortBy('FIRST_NAME');
-        // $students = $stu_x->sortBy('FIRST_NAME')->sortBy('LAST_NAME');
-        // $students = $stu_x->sortBy('LAST_NAME', 'FIRST_NAME');
-        // $students = $stu_x->sortBy('LAST_NAME');
-
-        // $students = $stu_x->orderBy('LAST_NAME', 'ASC')->orderBy('FIRST_NAME', 'ASC');
-        // $students = $stu_x->orderBy('FIRST_NAME')->orderBy('LAST_NAME');
-
         // dd($students);
-        // dd($new_collection);
-        // return $students;
-        // return $new_collection;
 
         foreach($students as $student)
         {
-          // $student->EntryTypeAlt = 'to-do';
           $student->EntryTypeAlt = $this->build_entry_type_alt_field($student->ETYP_ID);
           $student->IsAthlete = $this->build_is_athlete_field($student->ISATATHLETE, $student->ISSRATHLETE);
           $student->FullName = $student->LAST_NAME . ', ' . $student->FIRST_NAME;
@@ -140,24 +85,13 @@ class TradReportController extends Controller
             ->paginate(20);
 
         $htmlTableCounts = $this->build_html_table_counts($studentsCounts);
-        // $numCheck = $numFirstTimeAthletes + $numFirstTimeNonAthletes + $numTransferAthletes +  $numTransferNonAthletes + $numContinuingAthletes  + $numContinuingNonAthletes;
         dd($htmlTableCounts);
         // dd($numGrandTotal, $numCheck);
-
         // dd($numFirstTimeAthletes);
         // dd($numGrandTotal, $numFirstTimeAthletes, $students);
         // dd($numGrandTotal, $students);
         // dd($students);
 
-        //TODO work on code to produce the various counts needed for the email reprot!!!
-
-        // dd($students);
-
-        ////////////////////////////////////////////////////////////////////////
-        //FIX when try and return a collection to the view I get an error
-        // Facade\Ignition\Exceptions\ViewException
-        // Trying to get property 'DFLT_ID' of non-object (View: C:\Users\darrenh\laravel_code\empower\mail_demo\resources\views\trad_headcount\index.blade.php)
-        ////////////////////////////////////////////////////////////////////////
         return view('trad_headcount.index', compact('students'));
     }
 
@@ -166,39 +100,18 @@ class TradReportController extends Controller
 
       $numGrandTotal = $studentsCounts->count();
 
-      $numFirstTimeAthletes = $studentsCounts
-          ->where('EntryTypeAlt', 'first-time')
-          ->where('IsAthlete', 1)
-          ->count();
-
-      $numFirstTimeNonAthletes = $studentsCounts
-          ->where('EntryTypeAlt', 'first-time')
-          ->where('IsAthlete', 0)
-          ->count();
+      $numFirstTimeAthletes = $this->get_count_components($studentsCounts, 'first-time', 1);
+      $numFirstTimeNonAthletes = $this->get_count_components($studentsCounts, 'first-time', 0);
 
       $numFirsTimeTotal = $numFirstTimeAthletes + $numFirstTimeNonAthletes;
 
-      $numTransferAthletes = $studentsCounts
-          ->where('EntryTypeAlt', 'transfer')
-          ->where('IsAthlete', 1)
-          ->count();
-
-      $numTransferNonAthletes = $studentsCounts
-          ->where('EntryTypeAlt', 'transfer')
-          ->where('IsAthlete', 0)
-          ->count();
+      $numTransferAthletes = $this->get_count_components($studentsCounts, 'transfer', 1);
+      $numTransferNonAthletes = $this->get_count_components($studentsCounts, 'transfer', 0);
 
       $numTransferTotal = $numTransferAthletes + $numTransferNonAthletes;
 
-      $numContinuingAthletes = $studentsCounts
-          ->where('EntryTypeAlt', 'continuing/returning')
-          ->where('IsAthlete', 1)
-          ->count();
-
-      $numContinuingNonAthletes = $studentsCounts
-          ->where('EntryTypeAlt', 'continuing/returning')
-          ->where('IsAthlete', 0)
-          ->count();
+      $numContinuingAthletes = $this->get_count_components($studentsCounts, 'continuing/returning', 1);
+      $numContinuingNonAthletes = $this->get_count_components($studentsCounts, 'continuing/returning', 0);
 
       $numContinuingTotal = $numContinuingAthletes + $numContinuingNonAthletes;
 
@@ -211,6 +124,14 @@ class TradReportController extends Controller
                   'a41' => $numAthleteTotal, 'a42' => $numNonAthleteTotal, 'a43' => $numGrandTotal];
 
       return $results;
+    }
+
+    private function get_count_components($collection, $entry_type, $athlete_status)
+    {
+      return $collection
+          ->where('EntryTypeAlt', $entry_type)
+          ->where('IsAthlete', $athlete_status)
+          ->count();
     }
 
     private function build_is_athlete_field($value1, $value2)
