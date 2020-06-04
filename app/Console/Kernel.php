@@ -24,6 +24,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        // test line to invoke a Job through the Laravel scheduler
+        // $schedule->call(function () {
+        //   \App\Jobs\TradFtHeadcountByTypes::dispacth();
+        // })->dailyAt('01:00');
+
+
         // $schedule->command('word:day')->daily();
         // $schedule->command('inspire')->hourly();
 
