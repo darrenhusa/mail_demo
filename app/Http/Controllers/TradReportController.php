@@ -133,10 +133,20 @@ class TradReportController extends Controller
           $student->FullName = $student->LAST_NAME . ', ' . $student->FIRST_NAME;
         }
 
+        $studentsCounts = $students;
+
         $students = $students
             ->sortBy('FullName')
             ->paginate(20);
 
+        $htmlTableCounts = $this->build_html_table_counts($studentsCounts);
+        // $numCheck = $numFirstTimeAthletes + $numFirstTimeNonAthletes + $numTransferAthletes +  $numTransferNonAthletes + $numContinuingAthletes  + $numContinuingNonAthletes;
+        dd($htmlTableCounts);
+        // dd($numGrandTotal, $numCheck);
+
+        // dd($numFirstTimeAthletes);
+        // dd($numGrandTotal, $numFirstTimeAthletes, $students);
+        // dd($numGrandTotal, $students);
         // dd($students);
 
         //TODO work on code to produce the various counts needed for the email reprot!!!
@@ -149,6 +159,58 @@ class TradReportController extends Controller
         // Trying to get property 'DFLT_ID' of non-object (View: C:\Users\darrenh\laravel_code\empower\mail_demo\resources\views\trad_headcount\index.blade.php)
         ////////////////////////////////////////////////////////////////////////
         return view('trad_headcount.index', compact('students'));
+    }
+
+    private function build_html_table_counts($studentsCounts)
+    {
+
+      $numGrandTotal = $studentsCounts->count();
+
+      $numFirstTimeAthletes = $studentsCounts
+          ->where('EntryTypeAlt', 'first-time')
+          ->where('IsAthlete', 1)
+          ->count();
+
+      $numFirstTimeNonAthletes = $studentsCounts
+          ->where('EntryTypeAlt', 'first-time')
+          ->where('IsAthlete', 0)
+          ->count();
+
+      $numFirsTimeTotal = $numFirstTimeAthletes + $numFirstTimeNonAthletes;
+
+      $numTransferAthletes = $studentsCounts
+          ->where('EntryTypeAlt', 'transfer')
+          ->where('IsAthlete', 1)
+          ->count();
+
+      $numTransferNonAthletes = $studentsCounts
+          ->where('EntryTypeAlt', 'transfer')
+          ->where('IsAthlete', 0)
+          ->count();
+
+      $numTransferTotal = $numTransferAthletes + $numTransferNonAthletes;
+
+      $numContinuingAthletes = $studentsCounts
+          ->where('EntryTypeAlt', 'continuing/returning')
+          ->where('IsAthlete', 1)
+          ->count();
+
+      $numContinuingNonAthletes = $studentsCounts
+          ->where('EntryTypeAlt', 'continuing/returning')
+          ->where('IsAthlete', 0)
+          ->count();
+
+      $numContinuingTotal = $numContinuingAthletes + $numContinuingNonAthletes;
+
+      $numAthleteTotal = $numFirstTimeAthletes + $numTransferAthletes + $numContinuingAthletes;
+      $numNonAthleteTotal = $numFirstTimeNonAthletes + $numTransferNonAthletes + $numContinuingNonAthletes;
+
+      $results = ['a11' => $numFirstTimeAthletes, 'a12' => $numFirstTimeNonAthletes, 'a13' => $numFirsTimeTotal,
+                  'a21' => $numTransferAthletes, 'a22' => $numTransferNonAthletes, 'a23' => $numTransferTotal,
+                  'a31' => $numContinuingAthletes, 'a32' => $numContinuingNonAthletes, 'a33' => $numContinuingTotal,
+                  'a41' => $numAthleteTotal, 'a42' => $numNonAthleteTotal, 'a43' => $numGrandTotal];
+
+      return $results;
     }
 
     private function build_is_athlete_field($value1, $value2)
