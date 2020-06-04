@@ -11,10 +11,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//Send Fall 2020 FtTradHeadcountByTypes Email (to mailtrap.io)
 Route::get('/send', 'ReportController@send');
 
+//Display the report recipients for the email report above
 Route::get('/recipients', 'RecipientsController@index');
 
+//Display Fall 2020 FT Trad Enrolled Students with pagination
 Route::get('/students', 'TradReportController@index');
 
 // Route::get('/sr_athletes', function() {

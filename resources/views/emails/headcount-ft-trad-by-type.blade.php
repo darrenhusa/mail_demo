@@ -28,29 +28,29 @@
     <tbody>
       <tr>
         <td>continuing/returning</td>
-        <td>{{ $data['data11'] }}</td>
-        <td>{{ $data['data12'] }}</td>
-        <td>{{ $data['data13'] }}</td>
+        <td style="text-align: right;">{{ $data['data11'] }}</td>
+        <td style="text-align: right;">{{ $data['data12'] }}</td>
+        <td style="text-align: right;">{{ $data['data13'] }}</td>
       </tr>
       <tr>
         <tr>
           <td>first-time</td>
-          <td>{{ $data['data21'] }}</td>
-          <td>{{ $data['data22'] }}</td>
-          <td>{{ $data['data23'] }}</td>
+          <td style="text-align: right;">{{ $data['data21'] }}</td>
+          <td style="text-align: right;">{{ $data['data22'] }}</td>
+          <td style="text-align: right;">{{ $data['data23'] }}</td>
         </tr>
       </tr>
       <tr>
         <td>transfer</td>
-        <td>{{ $data['data31'] }}</td>
-        <td>{{ $data['data32'] }}</td>
-        <td>{{ $data['data33'] }}</td>
+        <td style="text-align: right;">{{ $data['data31'] }}</td>
+        <td style="text-align: right;">{{ $data['data32'] }}</td>
+        <td style="text-align: right;">{{ $data['data33'] }}</td>
       </tr>
       <tr>
         <td>Totals</td>
-        <td>{{ $data['data41'] }}</td>
-        <td>{{ $data['data42'] }}</td>
-        <td>{{ $data['data43'] }}</td>
+        <td style="text-align: right;">{{ $data['data41'] }}</td>
+        <td style="text-align: right;">{{ $data['data42'] }}</td>
+        <td style="text-align: right;">{{ $data['data43'] }}</td>
       </tr>
     </tbody>
   </table>
