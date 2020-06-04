@@ -1,11 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Mail;
+// use Illuminate\Support\Facades\Mail;
 // use App\Mail\FtTradHeadcountByTypes;
-use App\Jobs\TradFtHeadcountByTypes;
-use App\Queries\SrAthletes;
-use App\Queries\AtAthletes;
+// use App\Jobs\TradFtHeadcountByTypes;
+// use App\Queries\SrAthletes;
+// use App\Queries\AtAthletes;
 
 Route::get('/', function () {
     return view('welcome');
@@ -15,23 +15,22 @@ Route::get('/send', 'ReportController@send');
 
 Route::get('/recipients', 'RecipientsController@index');
 
-#copied from odbc_test
-Route::get('/ds1', 'TradReportController@index');
+Route::get('/students', 'TradReportController@index');
 
-Route::get('/sr_athletes', function() {
+// Route::get('/sr_athletes', function() {
+//
+//   $results = SrAthletes::get('20191');
+//   dd($results);
+// });
 
-  $results = SrAthletes::get('20191');
-  dd($results);
-});
-
-Route::get('/at_athletes', function() {
-
-  $results = AtAthletes::get('20191');
-  dd($results);
-});
+// Route::get('/at_athletes', function() {
+//
+//   $results = AtAthletes::get('20191');
+//   dd($results);
+// });
 
 
-Route::get('/trad_ft', 'TradReportController@get_trad_ft');
+// Route::get('/trad_ft', 'TradReportController@get_trad_ft');
 // Route::get('/recipients', function() {
 //   $recipients = Recipient::get();
 //   dd($recipients);
