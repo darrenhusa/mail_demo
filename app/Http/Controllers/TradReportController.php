@@ -13,7 +13,6 @@ class TradReportController extends Controller
 {
     public function index()
     {
-
         $term = '20191';
         $students = FtTradHeadcountsByTypes::get($term);
 
@@ -85,10 +84,10 @@ class TradReportController extends Controller
         // $term = '20191';
         // $students = FtTradHeadcountByTypes::get($term);
 
-        $studentsCounts = $students;
+        // $studentsCounts = $students;
 
-        $htmlTableCounts = $this->build_html_table_counts($studentsCounts);
-        dd($htmlTableCounts);
+        // $htmlTableCounts = $this->build_html_table_counts($studentsCounts);
+        // dd($htmlTableCounts);
         // dd($numGrandTotal, $numCheck);
         // dd($numFirstTimeAthletes);
         // dd($numGrandTotal, $numFirstTimeAthletes, $students);
@@ -100,45 +99,6 @@ class TradReportController extends Controller
             ->paginate(20);
 
         return view('trad_headcount.index', compact('students'));
-    }
-
-    private function build_html_table_counts($studentsCounts)
-    {
-
-      $numGrandTotal = $studentsCounts->count();
-
-      $numFirstTimeAthletes = $this->get_count_components($studentsCounts, 'first-time', 1);
-      $numFirstTimeNonAthletes = $this->get_count_components($studentsCounts, 'first-time', 0);
-
-      $numFirsTimeTotal = $numFirstTimeAthletes + $numFirstTimeNonAthletes;
-
-      $numTransferAthletes = $this->get_count_components($studentsCounts, 'transfer', 1);
-      $numTransferNonAthletes = $this->get_count_components($studentsCounts, 'transfer', 0);
-
-      $numTransferTotal = $numTransferAthletes + $numTransferNonAthletes;
-
-      $numContinuingAthletes = $this->get_count_components($studentsCounts, 'continuing/returning', 1);
-      $numContinuingNonAthletes = $this->get_count_components($studentsCounts, 'continuing/returning', 0);
-
-      $numContinuingTotal = $numContinuingAthletes + $numContinuingNonAthletes;
-
-      $numAthleteTotal = $numFirstTimeAthletes + $numTransferAthletes + $numContinuingAthletes;
-      $numNonAthleteTotal = $numFirstTimeNonAthletes + $numTransferNonAthletes + $numContinuingNonAthletes;
-
-      $results = ['a11' => $numFirstTimeAthletes, 'a12' => $numFirstTimeNonAthletes, 'a13' => $numFirsTimeTotal,
-                  'a21' => $numTransferAthletes, 'a22' => $numTransferNonAthletes, 'a23' => $numTransferTotal,
-                  'a31' => $numContinuingAthletes, 'a32' => $numContinuingNonAthletes, 'a33' => $numContinuingTotal,
-                  'a41' => $numAthleteTotal, 'a42' => $numNonAthleteTotal, 'a43' => $numGrandTotal];
-
-      return $results;
-    }
-
-    private function get_count_components($collection, $entry_type, $athlete_status)
-    {
-      return $collection
-          ->where('EntryTypeAlt', $entry_type)
-          ->where('IsAthlete', $athlete_status)
-          ->count();
     }
 
 

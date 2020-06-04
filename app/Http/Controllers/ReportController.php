@@ -33,13 +33,13 @@ class ReportController extends Controller
 
       // put Empower query builder queries here??
       // Need to calculate each of the headcount elements!!!
-      $data = array(
-        'data11'  => 65, 'data12'  => 105, 'data13'  => 170,
-        'data21'  => 68, 'data22'  => 31, 'data23'  => 99,
-        'data31'  => 9, 'data32'  => 7, 'data33'  => 16,
-        'data41'  => 142, 'data42'  => 143, 'data43'  => 285,
-      );
+      // $data = array(
+      //   'data11'  => 65, 'data12'  => 105, 'data13'  => 170,
+      //   'data21'  => 68, 'data22'  => 31, 'data23'  => 99,
+      //   'data31'  => 9, 'data32'  => 7, 'data33'  => 16,
+      //   'data41'  => 142, 'data42'  => 143, 'data43'  => 285,
+      // );
 
-      TradFtHeadcountByTypes::dispatch($term, $to, $data);
+      TradFtHeadcountByTypes::dispatch($term, $to);
   }
 }
