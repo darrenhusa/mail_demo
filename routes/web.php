@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 // use Illuminate\Support\Facades\Mail;
 // use App\Mail\FtTradHeadcountByTypes;
 // use App\Jobs\TradFtHeadcountByTypes;
@@ -10,6 +11,43 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/example1', function () {
+    $query = \DB::connection('odbc')
+    ->table('CCSJ_PROD.SR_STUDENT_TERM')
+    ->select('NAME_ID', 'CDIV_ID')
+    ->where('TERM_ID', '=', '20201');
+
+    $sql = $query->toSql();
+    $results = $query->get();
+    $count = $query->count();
+
+    dd($sql, $results, $count);
+
+    // return view('welcome');
+});
+
+Route::get('/example2', function () {
+    $query = \DB::connection('odbc')
+    ->table('CCSJ_PROD.SR_STUDENT_TERM')
+    ->select('TERM_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'CDIV_ID')
+    ->join('CCSJ_PROD.CCSJ_CO_V_NAME',
+           'CCSJ_PROD.CCSJ_CO_V_NAME.NAME_ID', '=',
+           'CCSJ_PROD.SR_STUDENT_TERM.NAME_ID')
+    ->where('TERM_ID', '=', '20201')
+    ->where('DFLT_ID', '=', '123456789');
+
+    $sql = $query->toSql();
+    $results = $query->get();
+    // $count = $query->count();
+
+    dd($sql, $results);
+    // dd($sql, $results, $count);
+
+    // return view('welcome');
+});
+
+
 
 //Send Fall 2020 FtTradHeadcountByTypes Email (to mailtrap.io)
 Route::get('/send', 'ReportController@send');
