@@ -94,6 +94,19 @@ Route::get('/lookup-at-athlete-status', function () {
     // ((CCSJ_PROD_CCSJ_CO_V_NAME.DFLT_ID)="100124780") AND
     // ((CCSJ_PROD_CO_ACTIV_CODE.ATHLETIC_FLAG)="T"));
 
+    $subQuery = \DB::connection('odbc')
+      ->table('CCSJ_PROD.CO_ACTIV_CODE')
+      ->select('ATHLETIC_FLAG')
+      ->where('ATHLETIC_FLAG', '=', 'T');
+
+    $sqlSubQuery = $subQuery->toSql();
+    // $numAtSports = $query->count();
+    $resultsSubQuery = $subQuery->get();
+    $countSubQuery = $subQuery->count();
+
+    // dd($sqlSubQuery, $countSubQuery);
+
+
     $query = \DB::connection('odbc')
     ->table('CCSJ_PROD.AT_ADMI_TERM')
     // ->select('TERM_ID', 'ADST_ID', 'ETYP_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'ACTI_ID', 'ATHLETIC_FLAG')
@@ -107,7 +120,13 @@ Route::get('/lookup-at-athlete-status', function () {
     ->join('CCSJ_PROD.AT_ADMI_ACTIV',
             'CCSJ_PROD.AT_ADMI_TERM.NAME_ID', '=',
             'CCSJ_PROD.AT_ADMI_ACTIV.NAME_ID');
-    // ->join('CCSJ_PROD.AT_ADMI_ACTIV',
+
+    // I hope this is close ==> just need to add the bindings?????
+
+    // ->joinSub($subQuery, 'CCSJ_PROD.CO_ACTIV_CODE', function($join) {
+    //   $join->on('CCSJ_PROD.AT_ADMI_ACTIV.ACTI_ID', '=', 'CCSJ_PROD.CO_ACTIV_CODE.ACTI_ID');
+    // });
+    // // ->join('CCSJ_PROD.AT_ADMI_ACTIV',
     //         'CCSJ_PROD.AT_ADMI_TERM.ACTI_ID', '=',
     //         'CCSJ_PROD.CCSJ_PROD_CO_ACTIV_CODE.ACTI_ID');
 
