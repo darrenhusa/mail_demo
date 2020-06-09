@@ -6,10 +6,22 @@ use Illuminate\Support\Facades\DB;
 // use App\Mail\FtTradHeadcountByTypes;
 // use App\Jobs\TradFtHeadcountByTypes;
 // use App\Queries\SrAthletes;
-// use App\Queries\AtAthletes;
+use App\Queries\FtTradHeadcountsByTypes;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/new', function () {
+    $term = '20201';
+    // $studentId = '100110307';
+
+    $results = FtTradHeadcountsByTypes::get($term);
+
+    dd($results);
+    // dd($sql, $results, $count);
+
+    // return view('welcome');
 });
 
 Route::get('/example1', function () {

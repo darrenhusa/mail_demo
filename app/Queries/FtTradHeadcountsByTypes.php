@@ -2,59 +2,71 @@
 
 namespace App\Queries;
 
-// use App\Queries\AtAthletes;
-// use App\Queries\SrAthletes;
-// use App\Queries\TradFulltimeEnrolled;
-
 
 class FtTradHeadcountsByTypes
 {
     public static function get($term)
     {
+      //beyonce hampton - does not have any 20201 record!!!
+      // $studentId = '100124780';
+      // count = 0
 
-      // $term = '20191';
+      // Kevin McCune has TWO AT-sports! MBO and MBS!!!
+      // $studentId = '100110307';
+      // count = 2
 
-      $results1 = TradFulltimeEnrolled::get($term);
-      $results2 = AtAthletes::get($term);
-      $results3 = SrAthletes::get($term);
+      // Hannah Gentry has ONE AT-sport WSO!!!
+      // $studentId = '100116464';
+      // count = 1
 
-      $temp = $results1->zip($results2, $results3);
+      // Andres Gomez is a PB - this is a non-athlete sport!!!
+      // Need to join the remaining table to FILTER out records like this one!
 
+      $students = TradFulltimeEnrolled::get($term);
+      // dd($results1);
 
-      $students = collect([]);
+      // Add New fields: NumAtSports, NumSrSports
+      $studentsWithNewFields = $students->map(function($student) {
+          $student->numAtSports = self::get_number_of_at_sports($student->TERM_ID, $student->DFLT_ID);
+          $student->numSrSports = self::get_number_of_sr_sports($student->TERM_ID, $student->DFLT_ID);
+          $student->EntryTypeAlt = self::build_entry_type_alt_field($student->ETYP_ID);
+          $student->IsAthlete = self::build_is_athlete_field($student->numAtSports, $student->numSrSports);
+          $student->FullName = $student->LAST_NAME . ', ' . $student->FIRST_NAME;
+          return $student;
+      });
 
-      foreach($temp as $record)
-      {
-        $new_array = [];
+      // dd($studentsWithNewFields);
 
-        foreach($record as $row)
-        {
-          array_push($new_array, (array)$row);
-        }
-        // how to convert an array to an object!!!!
-        //https://thewebtier.com/php/convert-array-object-php/
-        $result = json_decode(json_encode(array_merge($new_array[0], $new_array[1], $new_array[2])));
-
-        $students->push($result);
-      }
-
-      // dd($students);
-
-      foreach($students as $student)
-      {
-        $student->EntryTypeAlt = self::build_entry_type_alt_field($student->ETYP_ID);
-        $student->IsAthlete = self::build_is_athlete_field($student->ISATATHLETE, $student->ISSRATHLETE);
-        $student->FullName = $student->LAST_NAME . ', ' . $student->FIRST_NAME;
-      }
-
-      // $results = $query->get();
-
-      // dd($query->toSql());
-      // dd($results);
-
-        return $students;
-        // return $results;
+        return $studentsWithNewFields;
     }
+
+    private static function get_number_of_at_sports($term, $studentId)
+    {
+      return \DB::connection('odbc')
+          ->table('CCSJ_PROD.AT_ADMI_TERM')
+          ->select('TERM_ID', 'ADST_ID', 'ETYP_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'CCSJ_PROD.AT_ADMI_ACTIV.ACTI_ID', 'ATHLETIC_FLAG')
+          ->where('TERM_ID', '=', $term)
+          ->where('ATHLETIC_FLAG', '=', 'T')
+          ->where('DFLT_ID', '=', $studentId)
+          ->join('CCSJ_PROD.CCSJ_CO_V_NAME', 'CCSJ_PROD.CCSJ_CO_V_NAME.NAME_ID', '=', 'CCSJ_PROD.AT_ADMI_TERM.NAME_ID')
+          ->join('CCSJ_PROD.AT_ADMI_ACTIV', 'CCSJ_PROD.AT_ADMI_TERM.NAME_ID', '=', 'CCSJ_PROD.AT_ADMI_ACTIV.NAME_ID')
+          ->join('CCSJ_PROD.CO_ACTIV_CODE', 'CCSJ_PROD.AT_ADMI_ACTIV.ACTI_ID', '=', 'CCSJ_PROD.CO_ACTIV_CODE.ACTI_ID')
+          ->count();
+    }
+
+    private static function get_number_of_sr_sports($term, $studentId)
+    {
+      return \DB::connection('odbc')
+          ->table('CCSJ_PROD.SR_STUD_TERM_ACT')
+          ->select('TERM_ID', 'DFLT_ID', 'CCSJ_PROD.SR_STUD_TERM_ACT.ACTI_ID')
+          ->join('CCSJ_PROD.CCSJ_CO_V_NAME', 'CCSJ_PROD.CCSJ_CO_V_NAME.NAME_ID', '=', 'CCSJ_PROD.SR_STUD_TERM_ACT.NAME_ID')
+          ->join('CCSJ_PROD.CO_ACTIV_CODE', 'CCSJ_PROD.SR_STUD_TERM_ACT.ACTI_ID', '=', 'CCSJ_PROD.CO_ACTIV_CODE.ACTI_ID')
+          ->where('TERM_ID', '=', $term)
+          ->where('DFLT_ID', '=', $studentId)
+          ->where('ATHLETIC_FLAG', '=', 'T')
+          ->count();
+    }
+
 
     private static function build_is_athlete_field($value1, $value2)
     {
