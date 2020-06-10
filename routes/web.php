@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
-use App\Queries\FtTradHeadcountsByTypes;
+use App\Queries\TradEnrolled;
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,6 +21,17 @@ Route::get('/new', function () {
     // return view('welcome');
 });
 
+// test route!
+Route::get('/retention', function () {
+    $term = '20192';
+
+    $results = TradEnrolled::get($term);
+
+    dd($results);
+    // dd($sql, $results, $count);
+
+    // return view('welcome');
+});
 
 //Send Fall 2020 FtTradHeadcountByTypes Email (to mailtrap.io)
 Route::get('/send', 'ReportController@send');
