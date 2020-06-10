@@ -27,7 +27,20 @@ Route::get('/retention', function () {
 
     $results = TradEnrolled::get($term);
 
-    dd($results);
+    $sorted = $results->sortBy('FullName');
+
+    //get non-returners ==> IsAOrWInNextTerm = 0
+    //get returners ==> IsAOrWInNextTerm = 1
+
+    $nonReturners = $sorted->filter(function($student) {
+        return $student->IsAOrWInNextTerm == 0;
+    });
+
+    $returners = $sorted->filter(function($student) {
+        return $student->IsAOrWInNextTerm == 1;
+    });
+
+    dd($sorted->count(), $nonReturners->count(), $nonReturners, $returners->count(), $returners);
     // dd($sql, $results, $count);
 
     // return view('welcome');
