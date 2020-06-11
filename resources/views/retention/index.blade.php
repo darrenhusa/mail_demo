@@ -28,7 +28,8 @@
 			padding-right: 1rem; 		/*pl-4*/
 			padding-top: .5rem; 		/*pl-2*/
 			padding-bottom: .5rem; 		/*pl-2*/
-			line-height: 1.25; 			/*leading-tight*/
+      line-height: 1; 			/*leading-tight*/
+			/* line-height: 1.25; 			/*leading-tight*/ */
 			border-width: 2px; 			/*border-2*/
 			border-radius: .25rem;
 			border-color: #edf2f7; 		/*border-gray-200*/
@@ -78,14 +79,10 @@
 		table.dataTable.dtr-inline.collapsed>tbody>tr>td:first-child:before, table.dataTable.dtr-inline.collapsed>tbody>tr>th:first-child:before {
 			background-color: #667eea !important; /*bg-indigo-500*/
 		}
-
-      </style>
-
-
+  </style>
 
    </head>
    <body class="bg-gray-100 text-gray-900 tracking-wider leading-normal">
-
 
       <!--Container-->
       <div class="container w-full md:w-4/5 xl:w-3/5  mx-auto px-2">
@@ -94,7 +91,7 @@
 			<!-- <h1 class="flex items-center font-sans font-bold break-normal text-indigo-500 px-2 py-8 text-xl md:text-2xl">
 				Responsive <a class="underline mx-2" href="https://datatables.net/">DataTables.net</a> Table
 			</h1> -->
-      <h1>Spring 2020 TRAD NonReturners</h1>
+      <h1 class="flex items-center font-sans font-bold break-normal text-indigo-500 px-2 py-8 text-xl md:text-2xl">Spring 2020 TRAD NonReturners</h1>
 
 			<!--Card-->
 			 <div id='recipients' class="p-8 mt-6 lg:mt-0 rounded shadow bg-white">
@@ -125,14 +122,9 @@
 						</tr>
             @endforeach
 					</tbody>
-
 				</table>
-
-
 			</div>
 			<!--/Card-->
-
-
       </div>
       <!--/container-->
 
