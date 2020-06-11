@@ -3,6 +3,7 @@
 namespace App\Queries;
 
 use Illuminate\Support\Facades\DB;
+use EmpowerHelper;
 
 class TradEnrolled
 {
@@ -36,13 +37,13 @@ class TradEnrolled
       $students = $query1->get();
 
       $studentsWithNewFields = $students->map(function($student) {
-          $student->FullName = self::build_full_name_field($student->LAST_NAME, $student->FIRST_NAME);
-          $student->majorDesc = self::lookup_empower_major_description($student->MAMI_ID_MJ1);
-          $student->FtPtStatus = self::build_ft_pt_undergraduate_status_field($student->TU_CREDIT_ENRL);
-          $student->IsAOrWInNextTerm = self::build_is_a_or_w_status_in_term($student->DFLT_ID, '20201');
-          $student->numSrSports = self::get_number_of_sr_sports($student->TERM_ID, $student->DFLT_ID);
-          $student->IsSrAthlete = self::build_is_sr_athlete_field($student->numSrSports);
-          $student->Teams = self::build_teams_field($student->TERM_ID, $student->DFLT_ID);
+          $student->FullName = EmpowerHelper::build_full_name_field($student->LAST_NAME, $student->FIRST_NAME);
+          $student->majorDesc = EmpowerHelper::lookup_empower_major_description($student->MAMI_ID_MJ1);
+          $student->FtPtStatus = EmpowerHelper::build_ft_pt_undergraduate_status_field($student->TU_CREDIT_ENRL);
+          $student->IsAOrWInNextTerm = EmpowerHelper::build_is_a_or_w_status_in_term($student->DFLT_ID, '20201');
+          $student->numSrSports = EmpowerHelper::get_number_of_sr_sports($student->TERM_ID, $student->DFLT_ID);
+          $student->IsSrAthlete = EmpowerHelper::build_is_sr_athlete_field($student->numSrSports);
+          $student->Teams = EmpowerHelper::build_teams_field($student->TERM_ID, $student->DFLT_ID);
           return $student;
       });
 
@@ -52,82 +53,6 @@ class TradEnrolled
 
         return $studentsWithNewFields;
 
-    }
-
-
-    private static function build_full_name_field($last, $first)
-    {
-        return  $last . ', ' . $first;
-    }
-
-
-    // this function is duplicated!!!
-    // TODO - refactor code into an Empower helper utility class file???
-    private static function get_number_of_sr_sports($term, $studentId)
-    {
-      return \DB::connection('odbc')
-          ->table('CCSJ_PROD.SR_STUD_TERM_ACT')
-          ->select('TERM_ID', 'DFLT_ID', 'CCSJ_PROD.SR_STUD_TERM_ACT.ACTI_ID')
-          ->join('CCSJ_PROD.CCSJ_CO_V_NAME', 'CCSJ_PROD.CCSJ_CO_V_NAME.NAME_ID', '=', 'CCSJ_PROD.SR_STUD_TERM_ACT.NAME_ID')
-          ->join('CCSJ_PROD.CO_ACTIV_CODE', 'CCSJ_PROD.SR_STUD_TERM_ACT.ACTI_ID', '=', 'CCSJ_PROD.CO_ACTIV_CODE.ACTI_ID')
-          ->where('TERM_ID', '=', $term)
-          ->where('DFLT_ID', '=', $studentId)
-          ->where('ATHLETIC_FLAG', '=', 'T')
-          ->count();
-    }
-
-
-    private static function build_teams_field($term, $studentId)
-    {
-      return \DB::connection('odbc')
-          ->table('CCSJ_PROD.SR_STUD_TERM_ACT')
-          ->select('TERM_ID', 'DFLT_ID', 'CCSJ_PROD.SR_STUD_TERM_ACT.ACTI_ID')
-          ->join('CCSJ_PROD.CCSJ_CO_V_NAME', 'CCSJ_PROD.CCSJ_CO_V_NAME.NAME_ID', '=', 'CCSJ_PROD.SR_STUD_TERM_ACT.NAME_ID')
-          ->join('CCSJ_PROD.CO_ACTIV_CODE', 'CCSJ_PROD.SR_STUD_TERM_ACT.ACTI_ID', '=', 'CCSJ_PROD.CO_ACTIV_CODE.ACTI_ID')
-          ->where('TERM_ID', '=', $term)
-          ->where('DFLT_ID', '=', $studentId)
-          ->where('ATHLETIC_FLAG', '=', 'T')
-          ->orderBy('CCSJ_PROD.SR_STUD_TERM_ACT.ACTI_ID', 'asc')
-          ->get()
-          ->pluck('ACTI_ID')
-          ->implode(' ');
-    }
-
-
-    private static function build_is_a_or_w_status_in_term($studentId, $term)
-    {
-      return \DB::connection('odbc')
-          ->table('CCSJ_PROD.SR_STUDENT_TERM')
-          // ->select('TERM_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'STUD_STATUS')
-          ->select('STUD_STATUS')
-          ->join('CCSJ_PROD.CCSJ_CO_V_NAME', 'CCSJ_PROD.CCSJ_CO_V_NAME.NAME_ID', '=', 'CCSJ_PROD.SR_STUDENT_TERM.NAME_ID')
-          ->where('TERM_ID', '=', $term)
-          ->whereIn('STUD_STATUS', ['A', 'W'])
-          ->where('DFLT_ID', '=', $studentId)
-          ->count();
-    }
-
-
-    private static function lookup_empower_major_description($major_code)
-    {
-      return \DB::connection('odbc')
-          ->table('CCSJ_PROD.CO_MAJOR_MINOR')
-          ->where('MAMI_ID', '=', $major_code)
-          // ->value('DESCR')
-          ->pluck('DESCR')
-          ->first();
-    }
-
-
-    private static function build_is_sr_athlete_field($value)
-    {
-      return ($value > 0) ? true : false;
-    }
-
-
-    private static function build_ft_pt_undergraduate_status_field($value)
-    {
-      return ($value >= 12) ? 'FT' : 'PT';
     }
 
 }
