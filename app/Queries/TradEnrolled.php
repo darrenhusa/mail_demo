@@ -47,12 +47,14 @@ class TradEnrolled
           return $student;
       });
 
+      $students = $studentsWithNewFields->sortBy('FullName');
+      // $students = $studentsWithNewFields->orderBy('FullName');
+
       // dd($query1->toSql());
       // dd($query1->get());
-      // dd($results1);
+      // dd($students);
 
-        return $studentsWithNewFields;
-
+        return $students;
     }
 
 }

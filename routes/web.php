@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Queries\TradEnrolled;
+use App\Queries\FtTradHeadcountsByTypes;
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,23 +28,25 @@ Route::get('/retention', function () {
 
     $results = TradEnrolled::get($term);
 
-    $sorted = $results->sortBy('FullName');
+    // $sorted = $results->sortBy('FullName');
+    // $sorted = $results->orderBy('FullName');
 
     //get non-returners ==> IsAOrWInNextTerm = 0
     //get returners ==> IsAOrWInNextTerm = 1
 
-    $nonReturners = $sorted->filter(function($student) {
+    $nonReturners = $results->filter(function($student) {
         return $student->IsAOrWInNextTerm == 0;
     });
 
-    $returners = $sorted->filter(function($student) {
+    $returners = $results->filter(function($student) {
         return $student->IsAOrWInNextTerm == 1;
     });
 
-    dd($sorted->count(), $nonReturners->count(), $nonReturners, $returners->count(), $returners);
+    // dd($sorted->count(), $nonReturners->count(), $nonReturners, $returners->count(), $returners);
     // dd($sql, $results, $count);
+    // dd($nonReturners, $returners);
 
-    // return view('welcome');
+    return view('retention.index', compact('nonReturners'));
 });
 
 //Send Fall 2020 FtTradHeadcountByTypes Email (to mailtrap.io)
