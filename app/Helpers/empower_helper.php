@@ -75,6 +75,48 @@ class EmpowerHelper
     }
 
 
+    public static function lookup_empower_expected_date_degree($studentId)
+    {
+      return \DB::connection('odbc')
+          ->table('CCSJ_PROD.SR_STUDENT')
+          ->join('CCSJ_PROD.CCSJ_CO_V_NAME', 'CCSJ_PROD.CCSJ_CO_V_NAME.NAME_ID', '=', 'CCSJ_PROD.SR_STUDENT.NAME_ID')
+          ->where('DFLT_ID', '=', $studentId)
+          ->pluck('DATE_DEGR')
+          ->first();
+    }
+
+
+    public static function lookup_empower_expected_degree_type($studentId)
+    {
+      return \DB::connection('odbc')
+          ->table('CCSJ_PROD.SR_STUDENT')
+          ->join('CCSJ_PROD.CCSJ_CO_V_NAME', 'CCSJ_PROD.CCSJ_CO_V_NAME.NAME_ID', '=', 'CCSJ_PROD.SR_STUDENT.NAME_ID')
+          ->where('DFLT_ID', '=', $studentId)
+          ->pluck('DEGR_ID')
+          ->first();
+    }
+
+
+    public static function date_earned_most_recent_bachelors($studentId)
+    {
+      // Note: must be for CCSJ only!
+
+      // returns a 1 or 0
+      return \DB::connection('odbc')
+          ->table('CCSJ_PROD.CO_DEGREE_EARNED')
+          ->join('CCSJ_PROD.CCSJ_CO_V_NAME',
+                 'CCSJ_PROD.CCSJ_CO_V_NAME.NAME_ID',
+                 '=', 'CCSJ_PROD.CO_DEGREE_EARNED.NAME_ID')
+          ->where('DFLT_ID', '=', $studentId)
+          ->where('SCHL_ID', '=', '001834')
+          ->whereIn('DEGR_ID', ['BA', 'BS', 'BA13', 'BS13'])
+          ->whereNotNull('MAJOR1')
+          ->orderBy('DATE_EARNED', 'desc')
+          ->pluck('DATE_EARNED')
+          ->first();
+          // ->get();
+    }
+
     public static function build_full_name_field($last, $first)
     {
         return  $last . ', ' . $first;

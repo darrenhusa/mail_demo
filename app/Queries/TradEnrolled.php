@@ -44,10 +44,20 @@ class TradEnrolled
           $student->numSrSports = EmpowerHelper::get_number_of_sr_sports($student->TERM_ID, $student->DFLT_ID);
           $student->IsSrAthlete = EmpowerHelper::build_is_sr_athlete_field($student->numSrSports);
           $student->Teams = EmpowerHelper::build_teams_field($student->TERM_ID, $student->DFLT_ID);
+          $student->dateEarnedMostRecentBachelors = EmpowerHelper::date_earned_most_recent_bachelors($student->DFLT_ID);
+          $student->expectedDateDegree = EmpowerHelper::lookup_empower_expected_date_degree($student->DFLT_ID);
+          $student->expectedDegreeType = EmpowerHelper::lookup_empower_expected_degree_type($student->DFLT_ID);
           return $student;
       });
 
       $students = $studentsWithNewFields->sortBy('FullName');
+
+      // $seniors = $studentsWithNewFields->filter(function($student) {
+      //     return $student->CDIV_ID == 'SR';
+      // });
+
+      // dd($seniors->count(), $seniors);
+
       // $students = $studentsWithNewFields->orderBy('FullName');
 
       // dd($query1->toSql());

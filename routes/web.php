@@ -23,31 +23,7 @@ Route::get('/new', function () {
 });
 
 // test route!
-Route::get('/retention', function () {
-    $term = '20192';
-
-    $results = TradEnrolled::get($term);
-
-    // $sorted = $results->sortBy('FullName');
-    // $sorted = $results->orderBy('FullName');
-
-    //get non-returners ==> IsAOrWInNextTerm = 0
-    //get returners ==> IsAOrWInNextTerm = 1
-
-    $nonReturners = $results->filter(function($student) {
-        return $student->IsAOrWInNextTerm == 0;
-    });
-
-    $returners = $results->filter(function($student) {
-        return $student->IsAOrWInNextTerm == 1;
-    });
-
-    // dd($sorted->count(), $nonReturners->count(), $nonReturners, $returners->count(), $returners);
-    // dd($sql, $results, $count);
-    // dd($nonReturners, $returners);
-
-    return view('retention.index', compact('nonReturners'));
-});
+Route::get('/retention', 'TradRetentionReportController@index');
 
 //Send Fall 2020 FtTradHeadcountByTypes Email (to mailtrap.io)
 Route::get('/send', 'ReportController@send');
