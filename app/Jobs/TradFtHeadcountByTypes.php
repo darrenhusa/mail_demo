@@ -58,8 +58,7 @@ class TradFtHeadcountByTypes implements ShouldQueue
       Mail::to($this->to)
           ->send(new \App\Mail\FtTradHeadcountByTypes($this->term, $this->data));
 
-      // return redirect('/')
-      //   ->with('message', 'Email sent!');
+      // return redirect('/')->with('message', 'Email sent!');
     }
 
     private function build_html_table_counts($studentsCounts)

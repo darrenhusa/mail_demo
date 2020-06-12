@@ -86,6 +86,7 @@
             @endif
 
             <div class="content">
+              <!-- <p>{{ $message ?? '' }}</p> -->
                 <div class="title m-b-md">
                     Laravel
                 </div>
