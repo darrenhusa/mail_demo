@@ -113,8 +113,9 @@
 					<tbody>
             @foreach($students as $student)
 						<tr>
-							<td>{{ $student->DFLT_ID }}</td>
-							<td>{{ $student->FullName }}</td>
+							<td><a href="/retention/{{ $student->DFLT_ID }}">{{ $student->DFLT_ID }}</a></td>
+							<td>{{ $student->LAST_NAME }}, <br />
+                  {{ $student->FIRST_NAME }}</td>
 							<td>{{ $student->FtPtStatus }}</td>
 							<td>{{ $student->CDIV_ID }}</td>
 							<td>{{ $student->ETYP_ID }}</td>

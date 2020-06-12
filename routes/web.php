@@ -24,6 +24,7 @@ Route::get('/new', function () {
 
 // test route!
 Route::get('/retention', 'TradRetentionReportController@index');
+Route::get('/retention/{studentId}', 'TradRetentionReportController@show');
 
 //Send Fall 2020 FtTradHeadcountByTypes Email (to mailtrap.io)
 Route::get('/send', 'ReportController@send');
