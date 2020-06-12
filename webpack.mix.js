@@ -1,8 +1,5 @@
 const mix = require('laravel-mix');
 
-// for Tailwind: https://github.com/JeffreyWay/laravel-mix-tailwind
-require('laravel-mix-tailwind');
-
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -14,10 +11,8 @@ require('laravel-mix-tailwind');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .tailwind();
-    // .sass('resources/sass/app.scss', 'public/css');
+mix.js('resources/js/app.js', 'public/js');
 
-// mix.js('resources/js/app.js', 'public/js')
-//     .sass('resources/sass/app.scss', 'public/css')
-//     .tailwind();
+mix.postCss('resources/css/main.css', 'public/css', [
+  require('tailwindcss'),
+]);
