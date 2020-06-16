@@ -107,7 +107,7 @@
 							<th data-priority="4">Class Status</th>
               <th data-priority="5">Entry Type</th>
 							<th data-priority="6">Major</th>
-							<th data-priority="7">Is Sr Athlete</th>
+              <th data-priority="7">Is Sr Athlete</th>
 						</tr>
 					</thead>
 					<tbody>
