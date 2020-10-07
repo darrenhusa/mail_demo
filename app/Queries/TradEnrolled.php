@@ -40,7 +40,7 @@ class TradEnrolled
           $student->FullName = EmpowerHelper::build_full_name_field($student->LAST_NAME, $student->FIRST_NAME);
           $student->majorDesc = EmpowerHelper::lookup_empower_major_description($student->MAMI_ID_MJ1);
           $student->FtPtStatus = EmpowerHelper::build_ft_pt_undergraduate_status_field($student->TU_CREDIT_ENRL);
-          $student->IsAOrWInNextTerm = EmpowerHelper::build_is_a_or_w_status_in_term($student->DFLT_ID, '20201');
+          $student->IsAOrWInNextTerm = EmpowerHelper::build_is_a_or_w_status_in_term($student->DFLT_ID, '20202');
           $student->numSrSports = EmpowerHelper::get_number_of_sr_sports($student->TERM_ID, $student->DFLT_ID);
           $student->IsSrAthlete = EmpowerHelper::build_is_sr_athlete_field($student->numSrSports);
           $student->Teams = EmpowerHelper::build_teams_field($student->TERM_ID, $student->DFLT_ID);

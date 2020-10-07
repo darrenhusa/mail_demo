@@ -92,7 +92,7 @@
 				Responsive <a class="underline mx-2" href="https://datatables.net/">DataTables.net</a> Table
 			</h1> -->
       <h1 class="flex items-center font-sans font-bold break-normal text-indigo-500 px-2 py-8 text-xl md:text-2xl">
-        Spring 2020 TRAD "Eligible" NonReturners</h1>
+        Spring 2021 TRAD "Eligible" NonReturners</h1>
 
 			<!--Card-->
 			 <div id='recipients' class="p-8 mt-6 lg:mt-0 rounded shadow bg-white">

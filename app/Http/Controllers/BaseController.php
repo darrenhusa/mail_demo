@@ -14,8 +14,8 @@ class BaseController extends Controller
 
     public function __construct()
     {
-        // build up Spring 2020 Trad Enrolled dataset/collection
-        $term = '20192';
+        // build up Fall 2020 Trad Enrolled dataset/collection
+        $term = '20201';
         $results = TradEnrolled::get($term);
 
         // dd($results);
@@ -28,7 +28,7 @@ class BaseController extends Controller
         //     return $student->IsAOrWInNextTerm == 1;
         // });
 
-        // determine if non-returning student is an expected August 2020 Bachelors graduate or
+        // determine if non-returning student is an expected December 2020 Bachelors graduate or
         // if they earned a Bachelors dergee in May 2020.
         $nonReturnersWithEligibleStatus = $nonReturners->map(function($student) {
           $student->eligibilityStatus = $this->determine_eligibility_status($student);
@@ -53,16 +53,16 @@ class BaseController extends Controller
       $date_degree_expected = Carbon::parse($student->expectedDateDegree);
 
       // Test for is a May 2020 Bachelors graduate
-      if( ($date_earned_degree->year == 2020) && ($date_earned_degree->month == 5) )
-      {
-          return true;
-      }
+      // if( ($date_earned_degree->year == 2020) && ($date_earned_degree->month == 5) )
+      // {
+      //     return true;
+      // }
 
-      // Test for is an expected August 2020 Bachelors graduate
+      // Test for is an expected December 2020 Bachelors graduate
       if( ($student->expectedDegreeType == 'BA') || ($student->expectedDegreeType == 'BS') ||
           ($student->expectedDegreeType == 'BA13') || ($student->expectedDegreeType == 'BS13'))
       {
-          if( ($date_degree_expected->year == 2020) && ($date_degree_expected->month == 8) )
+          if( ($date_degree_expected->year == 2020) && ($date_degree_expected->month == 12) )
           {
             return true;
           }
